@@ -1,11 +1,439 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>マイページ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>電気工学学習記録 | Engineering Blog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f9fafb;
+            --bg-white: #ffffff;
+            --border-color: #e5e7eb;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section */
+        section {
+            margin: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient);
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .blog-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .blog-card .date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card p {
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--bg-light);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            margin-right: 0.5rem;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 4rem;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            margin: 0 auto;
+        }
+
+        .about-text h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .about-text p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        /* Skills Section */
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .skill-badge {
+            background: var(--gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .social-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .blog-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
 </head>
 <body>
-    <h1>GitHub Pagesへようこそ！</h1>
-    <p>初めてのウェブサイト公開に成功しました。</p>
+    <header>
+        <nav>
+            <div class="logo">⚡ Engineering Blog</div>
+            <ul class="nav-links">
+                <li><a href="#home">ホーム</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#blog">学習記録</a></li>
+                <li><a href="#contact">お問い合わせ</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <h1>電気工学の学習記録</h1>
+            <p>回路設計、信号処理、制御理論など、日々の学習内容をアウトプットしていきます</p>
+        </section>
+
+        <div class="container">
+            <section class="about" id="about">
+                <div class="about-content">
+                    <div class="profile-image">👨‍🔬</div>
+                    <div class="about-text">
+                        <h2>About Me</h2>
+                        <p>電気系大学生として、回路理論、電子回路、信号処理、制御工学などを学んでいます。理論と実践の両面から、電気工学の面白さを追求しています。</p>
+                        <p>このサイトでは、学習した内容を整理し、アウトプットすることで理解を深めていきます。</p>
+                        <div class="skills">
+                            <span class="skill-badge">回路理論</span>
+                            <span class="skill-badge">電子回路</span>
+                            <span class="skill-badge">信号処理</span>
+                            <span class="skill-badge">制御工学</span>
+                            <span class="skill-badge">プログラミング</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="blog">
+                <h2 class="section-title">学習記録</h2>
+                <div class="blog-grid">
+                    <div class="blog-card">
+                        <h3>オペアンプの基本動作</h3>
+                        <div class="date">2024年1月15日</div>
+                        <p>オペアンプの理想特性と実際の動作について、反転増幅回路と非反転増幅回路の設計を通じて学びました。</p>
+                        <span class="tag">電子回路</span>
+                        <span class="tag">基礎</span>
+                    </div>
+
+                    <div class="blog-card">
+                        <h3>フーリエ変換の理解</h3>
+                        <div class="date">2024年1月10日</div>
+                        <p>信号処理の基礎となるフーリエ変換について、数学的な背景から実用的な応用まで整理しました。</p>
+                        <span class="tag">信号処理</span>
+                        <span class="tag">数学</span>
+                    </div>
+
+                    <div class="blog-card">
+                        <h3>PID制御の実装</h3>
+                        <div class="date">2024年1月5日</div>
+                        <p>PID制御器の設計とパラメータ調整について、シミュレーションを通じて理解を深めました。</p>
+                        <span class="tag">制御工学</span>
+                        <span class="tag">実装</span>
+                    </div>
+
+                    <div class="blog-card">
+                        <h3>トランジスタの動作原理</h3>
+                        <div class="date">2023年12月28日</div>
+                        <p>バイポーラトランジスタとFETの動作原理、特性曲線の読み方についてまとめました。</p>
+                        <span class="tag">電子回路</span>
+                        <span class="tag">半導体</span>
+                    </div>
+
+                    <div class="blog-card">
+                        <h3>フィルタ回路の設計</h3>
+                        <div class="date">2023年12月20日</div>
+                        <p>ローパスフィルタとハイパスフィルタの設計方法、周波数特性の解析について学びました。</p>
+                        <span class="tag">回路理論</span>
+                        <span class="tag">設計</span>
+                    </div>
+
+                    <div class="blog-card">
+                        <h3>デジタル信号処理入門</h3>
+                        <div class="date">2023年12月15日</div>
+                        <p>サンプリング定理、Z変換、ディジタルフィルタの基礎について整理しました。</p>
+                        <span class="tag">信号処理</span>
+                        <span class="tag">デジタル</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer id="contact">
+        <p>&copy; 2024 Engineering Blog. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">GitHub</a>
+            <a href="#">Twitter</a>
+            <a href="#">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.blog-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>
